@@ -5,13 +5,6 @@ This project is a work in progress. The auxillary paper will be submitted in apr
 
 ![image](Figures/Combined.png "Example Setup for Sensors")
 
-# Author and Attributions
-This demo was built by Tobias Heller (TUM) in combination with a paper written at the chair of Augmented Reality at TUM under the supervision of Daniel Dyrda M. Sc. (TUM) and Dr. rer. nat. David Plecher (TUM).
-
-We make heavy use of Cysharp's R3 for observables: https://github.com/Cysharp/R3.
-
-Animations from Mixamo: https://www.mixamo.com/
-
 # States of Movement
 The following is a non-exhaustive list of summaries of states that are currently implemented or being worked on. Future versions will include more states including jumps and some parcour.
 ## Ground Movement
@@ -49,5 +42,9 @@ The player character moves on the surface of a body of liqud, propelled by his o
 
 <img src="Figures/Screenshot Editor Swimming.png" alt="A Unity Editor Screenshot of a Character swimming in water" width="50%"/>
 
+# Author and Attributions
+This demo was built by Tobias Heller (TUM) in combination with a paper written at the chair of Augmented Reality at TUM under the supervision of Daniel Dyrda M. Sc. (TUM) and Dr. rer. nat. David Plecher (TUM).
 
-*To be continued...*
+We make heavy use of Cysharp's R3 for observables: https://github.com/Cysharp/R3.
+
+Animations from Mixamo: https://www.mixamo.com/
