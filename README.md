@@ -1,4 +1,5 @@
-# Overview
+# Sensor-Enabled State Machine Architecture for Player Movement in Action Adventure Games
+
 This is a Unity demo for an auxillary paper written at the Technical University of Munich. We explore the possibilities of a reactive character control system based around subscriptions and sensors. In our system, subscriptions manage functions connected to sensors while sensors can be anything from volumetric colliders and raycasts to timers or user input. We use a state machine approch to handle the base logic of interactios while the sensors inform the state machine about the environment, motivating animations, state changes and camera movement. The set of implemented features is chosen by an analysis of the current top 20 games in the broader action adventure genre.
 
 This project is a work in progress. The auxillary paper will be submitted in april 2025.
