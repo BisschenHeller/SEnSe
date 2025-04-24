@@ -1,11 +1,20 @@
-using UnityEditor.Experimental.GraphView;
+using System;
 using UnityEngine;
 
-public class ScriptedAnimationState : PlayerState 
+public class ScriptedAnimationState : MovementBaseState 
 {
     private AnimationID _animation;
 
-    public ScriptedAnimationState(PlayerStateMachine stateMachine, PlayerStateFactory factory, AnimationID animation) : base(stateMachine, factory) { _animation = animation; }
+    private Action<bool> _onComplete;
+
+    public ScriptedAnimationState(
+        SensorEnabledMovementStateMachine stateMachine, 
+        AnimationID animation, Action<bool> onComplete) 
+        : base(stateMachine, stateMachine._transitionSettings) 
+    { 
+        _animation = animation;
+        _onComplete = onComplete;
+    }
 
     public override string GetStateName()
     {
@@ -19,44 +28,48 @@ public class ScriptedAnimationState : PlayerState
 
     private void TransitionToGroundMovement(bool doIt)
     {
-        if (doIt) SwitchState(_factory.GroundMovement());
+        if (doIt)
+        {
+            SwitchState(new GroundMovementState(SEnSe));
+        }
     }
 
     protected override void EnterConcreteState()
     {
         // Add Sensor that will tell us whe the animation is finished and subscribe to that sensor.
         //_player.AddSensor(SensorID.WaitOnAnimationFinished);
-        Debug.Log("EnterCOncrete State Parcour!");
+        
 
-        player.SetKinematic(true);
-        Debug.Log("SetKinematic()");
+        SEnSe.SetKinematic(true);
+        
         AddSubscription(SensorID.AnimationFinished, TransitionToGroundMovement);
-        Debug.Log("AddedSubscription()");
 
-        bool exists = player.animationHashes.TryGetValue(_animation, out int animationHash);
+        bool exists = SEnSe.animationHashes.TryGetValue(_animation, out int animationHash);
         if (!exists) Debug.LogError("Animation " + _animation.ToString() + " does not exist.");
-        Debug.Log("Playing animation " + _animation.ToString() + " (Hash=" + animationHash + ")");
-        player.PlayAnimation(animationHash); 
+        //Debug.Log("Playing animation " + _animation.ToString() + " (Hash=" + animationHash + ")");
+        SEnSe.PlayAnimation(animationHash); 
     }
 
     protected override void ExitConcreteState()
     {
-        player.SetKinematic(false);
+        SEnSe.SetKinematic(false);
     }
 
-    public override void HandleMoveInput(Vector3 premultipliedMovement)
+    public override void HandleMoveInput(Vector3 desiredVelocity)
     {
-        player.transform.position += player.transform.forward * Time.deltaTime * player.currentSpeed;
+        // Cannot interrupt these
+        return;
     }
 
-    protected override void SetAnimationMotionSpeed(Vector3 premultipliedMovement)
+    protected override void UpdateConcreteGravity()
     {
-        player.SetAnimatedMotionSpeed(player.currentSpeed);
-    }
-
-    protected override void UpdateGravity()
-    {
+        return;
         // No Gravity
+    }
+
+    protected override void UpdateConcreteState()
+    {
+        SEnSe.transform.position += SEnSe.transform.forward * Time.deltaTime * SEnSe.currentSpeed;
     }
 }
 

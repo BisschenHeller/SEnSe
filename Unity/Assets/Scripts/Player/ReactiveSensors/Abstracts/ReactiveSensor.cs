@@ -7,42 +7,38 @@ public abstract class ReactiveSensor : MonoBehaviour {
     protected Color inactiveGizmoColor = new Color(0.2f, 0.2f, 0.2f, 0.8f);
     protected Color activeGizmoColor = new Color(0.4f, 0.4f, 0.8f, 0.9f);
 
+    /// <summary>Returns the unique ID of the sensor, usually a hard-coded value.</summary>
     public abstract SensorID GetSensorID();
 
     public abstract string ToInspectorString();
+    // Used for debugging
 
     /// <summary>
-    /// Subscribes a function of type Action<bool> to the sensor. Will throw an exception if this is not allowed.
+    /// Exposes the underlying R3.Observable of Type bool if available for subscription handling
     /// </summary>
-    /// <param name="boolAction">A Function with return type void that receives a bool as input</param>
-    public abstract IDisposable SubscribeB(Action<bool> boolAction);
-
+    public virtual Observable<bool> ExposeBoolObservable()
+    {
+        throw new IllegalSensorExpositionException("bool", ToInspectorString());
+    }
+    // Needs to be overwritten by derived sensors to work.
 
     /// <summary>
-    /// Subscribes a function of type Action<Vector3> to the sensor. Will throw an exception if this is not allowed.
+    /// Exposes the underlying R3.Observable of Type Vector3 if available for subscription handling
     /// </summary>
-    /// <param name="vec3">A Function with return type void that receives a Vector3 as input</param>
-    public abstract IDisposable SubscribeV(Action<Vector3> vec3Action);
-
+    public virtual Observable<Vector3> ExposeVector3Observable()
+    {
+        throw new IllegalSensorExpositionException("Vector3", ToInspectorString());
+    }
+    // Needs to be overwritten by derived sensors to work.
 
     /// <summary>
-    /// Subscribes a function of type Action<float> to the sensor. Will throw an exception if this is not allowed.
+    /// Exposes the underlying R3.Observable of Type float if available for subscription handling
     /// </summary>
-    /// <param name="floatAction">A Function with return type void that receives a float as input</param>
-    public abstract IDisposable SubscribeF(Action<float> floatAction);
-
-
-    /// <summary>
-    /// Subscribes a function of type Action<Collider> to the sensor. Will throw an exception if this is not allowed.
-    /// </summary>
-    /// <param name="colliderAction">A Function with return type void that receives a bool as input</param>
-    public abstract IDisposable SubscribeC(Action<Collider> colliderAction);
-
-    public abstract Observable<bool> ExposeBoolObservable();
-
-    public abstract Observable<Vector3> ExposeVec3Observable();
-
-    public abstract Observable<float> ExposeFloatObservable();
+    public virtual Observable<float> ExposeFloatObservable()
+    {
+        throw new IllegalSensorExpositionException("Float", ToInspectorString());
+    }
+    // Needs to be overwritten by derived sensors to work.
 }
 
 public enum SensorID
@@ -56,10 +52,10 @@ public enum SensorID
     Crouching = 5,
     Jump = 6,
     Sprint = 7,
-    TouchingWater = 8,
-    GroundedAndNotTouchingWater = 9,
+    InsideDeepWater = 8,
     ParkourObject = 10,
-    ParkourAndSprinting = 11,
     AnimationFinished = 12,
-    Climbable = 13
+    TouchingClimbable = 13,
+    PlayerVelocity = 14,
+    AnimationCurve1 = 15
 }

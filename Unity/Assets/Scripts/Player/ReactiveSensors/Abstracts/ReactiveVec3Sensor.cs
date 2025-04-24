@@ -18,16 +18,7 @@ public abstract class ReactiveVec3Sensor : ReactiveSensor
             return _observable;
         }
     }
-    protected abstract Observable<Vector3> ConstructObservable();
-
-    
-
-    public override IDisposable SubscribeV(Action<Vector3> vec3Action)
-    {
-        return observable.Subscribe(vec3Action).AddTo(this);
-    }
-
-    
+    protected abstract Observable<Vector3> ConstructObservable();    
 
     /// <summary>
     ///    Observes the magnitude of the Vector3 Sensor
@@ -38,22 +29,10 @@ public abstract class ReactiveVec3Sensor : ReactiveSensor
         return observable.Select(n => n.magnitude);
     }
 
-    public override Observable<Vector3> ExposeVec3Observable() => observable;
+    public override Observable<Vector3> ExposeVector3Observable() => observable;
 
     public override Observable<bool> ExposeBoolObservable()
     {
         throw new IllegalSensorExpositionException("bool", "Vector3");
-    }
-    public override IDisposable SubscribeB(Action<bool> boolAction)
-    {
-        throw new IllegalSensorSubscriptionException("bool", "Vector3");
-    }
-    public override IDisposable SubscribeF(Action<float> floatAction)
-    {
-        throw new IllegalSensorSubscriptionException("float", "Vector3");
-    }
-    public override IDisposable SubscribeC(Action<Collider> colliderAction)
-    {
-        throw new IllegalSensorSubscriptionException("Collider", "Vector3");
     }
 }

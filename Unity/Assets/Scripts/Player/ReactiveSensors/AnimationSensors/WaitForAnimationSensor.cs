@@ -30,38 +30,8 @@ public class WaitForAnimationSensor : ReactiveSensor
         return "WaitForAnimation";
     }
 
-    public override IDisposable SubscribeB(Action<bool> boolAction)
-    {   
-        return boolObservable.Subscribe(boolAction);
-    }
-
-    public override Observable<Vector3> ExposeVec3Observable()
-    {
-        throw new IllegalSensorExpositionException("Vector3", "Animation");
-    }
-
-    public override IDisposable SubscribeV(Action<Vector3> vec3Action)
-    {
-        throw new IllegalSensorSubscriptionException("Vector3", "Animation");
-    }
-
     public override Observable<bool> ExposeBoolObservable()
     {
         return boolObservable;
-    }
-
-    public override IDisposable SubscribeF(Action<float> floatAction)
-    {
-        throw new IllegalSensorSubscriptionException("float", "Animation");
-    }
-
-    public override IDisposable SubscribeC(Action<Collider> colliderAction)
-    {
-        throw new IllegalSensorSubscriptionException("Collider", "Animation");
-    }
-
-    public override Observable<float> ExposeFloatObservable()
-    {
-        throw new IllegalSensorExpositionException("float", "Animation");
     }
 }

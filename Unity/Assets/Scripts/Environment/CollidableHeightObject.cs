@@ -22,7 +22,7 @@ public class CollidableHeightObject : CollidableElement
 
         float angle = Mathf.Abs(Vector3.Angle(-flattenedDir, globalDirection));
 
-        Debug.Log("Incoming dir: " + flattenedDir + "   Receiving: " + globalDirection + "   Angle: " + angle + "   Passing: " + (angle < allowAngles));
+        //Debug.Log("Incoming dir: " + flattenedDir + "   Receiving: " + globalDirection + "   Angle: " + angle + "   Passing: " + (angle < allowAngles));
 
         return angle < allowAngles;
     }

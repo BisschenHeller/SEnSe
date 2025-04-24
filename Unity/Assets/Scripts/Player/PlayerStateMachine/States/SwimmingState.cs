@@ -1,27 +1,38 @@
+using R3;
 using UnityEngine;
 
-public class SwimmingState : PlayerState
+public class SwimmingState : MovementBaseState
 {
     private float surfaceLevel = -1.2f;
-    public SwimmingState(PlayerStateMachine currentContext, PlayerStateFactory factory)
-    : base(currentContext, factory) { }
+
+    private float waterHeight = 0.8f;
+    public SwimmingState(SensorEnabledMovementStateMachine currentContext)
+    : base(currentContext, currentContext._swimmingSettings) { }
 
     public override string GetStateName()
     {
         return "Swimming";
     }
 
+    public void AdaptToWaterLevel(float waterLevel)
+    {
+        Debug.Log("New WaterLevel: " + waterLevel);
+        surfaceLevel = waterLevel;
+    }
+
     protected override void EnterConcreteState()
     {
-        Debug.Log("Entering Swimming State!");
-        AddSubscription(SensorID.GroundedAndNotTouchingWater, GoOnLand);
+        // If feet touch the ground and hip is no longer under water we can start walking again.
+        AddManualSubscription(SEnSe.CombineBoolSensors(SensorID.Grounded, SensorID.InsideDeepWater, (a, b) => { return a && !b; }).Subscribe(GoOnLand));
 
-        player.SetMovementSettingsAndBlendTree(MovementSettingsID.Swimming);
+        AddSubscription(SensorID.InsideDeepWater, AdaptToWaterLevel);
+
+        SEnSe.SetMovementSettingsAndBlendTree(MovementSettingsID.Swimming);
     }
 
     private void GoOnLand(bool groundedAndOut)
     {
-        if (groundedAndOut) { SwitchState(_factory.GroundMovement()); }
+        if (groundedAndOut) { SwitchState(new GroundMovementState(SEnSe)); }
     }
 
     protected override void ExitConcreteState()
@@ -34,13 +45,21 @@ public class SwimmingState : PlayerState
         
     }
 
-    protected override void UpdateGravity()
+    protected override void UpdateConcreteGravity()
     {
-        if (player.grounded)
-            player.transform.position = new Vector3(player.transform.position.x, Mathf.Max(player.transform.position.y, surfaceLevel - player.height / 2), player.transform.position.z);
+        /*if (SEnSe.grounded)
+            SEnSe.transform.position = new Vector3(SEnSe.transform.position.x, Mathf.Max(SEnSe.transform.position.y, surfaceLevel - SEnSe.height / 2), SEnSe.transform.position.z);
         else
-            player.transform.position = new Vector3(player.transform.position.x, surfaceLevel - player.height / 2, player.transform.position.z);
+            SEnSe.transform.position = new Vector3(SEnSe.transform.position.x, surfaceLevel - SEnSe.height / 2, SEnSe.transform.position.z);*/
+        //if (SEnSe.grounded) base.UpdateGeneralGravity();
 
-        player.verticalVelocity = 0;
+        SEnSe.verticalVelocity = Mathf.SmoothStep(-0.01f, 0.01f, surfaceLevel - waterHeight - SEnSe.transform.position.y);
+
+        
+    }
+
+    protected override void UpdateConcreteState()
+    {
+        // TODO
     }
 }

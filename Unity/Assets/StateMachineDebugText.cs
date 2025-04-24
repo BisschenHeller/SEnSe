@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class StateMachineDebugText : MonoBehaviour
 {
-    private PlayerStateMachine stateMachine;
+    private SensorEnabledMovementStateMachine stateMachine;
 
     private TextMeshProUGUI textMeshProUGUI;
 
@@ -11,7 +11,7 @@ public class StateMachineDebugText : MonoBehaviour
     void Start()
     {
         textMeshProUGUI = GetComponent<TextMeshProUGUI>();
-        stateMachine = FindAnyObjectByType<PlayerStateMachine>();    
+        stateMachine = FindAnyObjectByType<SensorEnabledMovementStateMachine>();    
     }
 
     // Update is called once per frame

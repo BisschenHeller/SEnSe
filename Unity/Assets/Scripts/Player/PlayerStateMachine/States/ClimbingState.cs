@@ -1,13 +1,16 @@
+using R3;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class ClimbingState : PlayerState
+public class ClimbingState : MovementBaseState
 {
     public override string GetStateName()
     {
         return "Climbing";
     }
 
-    public ClimbingState(PlayerStateMachine context, PlayerStateFactory factory) : base(context, factory)
+    public ClimbingState(SensorEnabledMovementStateMachine context) : base(context, context._climbingSettings)
     {
 
     }
@@ -17,53 +20,101 @@ public class ClimbingState : PlayerState
         throw new System.NotImplementedException();
     }
 
+    private void GoBackToGround(bool doIt)
+    {
+        SwitchState(new GroundMovementState(SEnSe));
+    }
+
+    private void ClimbOutOnTop(bool doIt)
+    {
+        // Start Transition Animation
+        SwitchState(new ScriptedAnimationState(SEnSe, AnimationID.Climbing_TopOut, 
+            // When that is done, go to ground movement
+            (n) => SwitchState(new GroundMovementState(SEnSe))));
+    }
+
     protected override void EnterConcreteState()
     {
         int climbingHash = Animator.StringToHash("Climbing");
-        player.CrossFadeAnimation(climbingHash);
-        player.SetKinematic(true);
-    }
+        SEnSe.CrossFadeAnimation(climbingHash);
+        SEnSe.SetKinematic(true);
 
-    public bool canStop;
+        bool horizInputSensor = SEnSe._sensorsByKey.TryGetValue(SensorID.HorizontalInput, out ReactiveSensor horizontalInputSensor);
+
+        if (SEnSe._sensorsByKey.TryGetValue(SensorID.Grounded, out ReactiveSensor groundedSensor) &&
+            horizInputSensor)
+        {
+            // Go back down from the wall if ground is being touched and the player is pressing down keys.
+            AddManualSubscription(horizontalInputSensor.ExposeVector3Observable()
+                .Select<Vector3, bool>(n => { return n.z < -0.5f; } )
+                .Where(x => x)
+                .CombineLatest(groundedSensor.ExposeBoolObservable(), (inputDown, grounded) => { return grounded; })
+                .Where(x => x)
+                .Subscribe(GoBackToGround)
+                );
+        } else
+        {
+            Debug.LogError("Either Grounded- or HorizintalInput Sensor were not found.");
+        }
+
+        if (SEnSe._sensorsByKey.TryGetValue(SensorID.TouchingClimbable, out ReactiveSensor climbableSurfaceSensor) &&
+            horizInputSensor)
+        {
+            AddManualSubscription(horizontalInputSensor.ExposeVector3Observable()
+                .Select<Vector3, bool>(n => { return n.z > 0.0f; })
+                .WithLatestFrom(climbableSurfaceSensor.ExposeBoolObservable(), (inputUp, climbable) => { /*Debug.Log("InputUp: " + inputUp + "  climbable: " + climbable); */ return inputUp && !climbable; })
+                .Where(x => x)
+                .Subscribe(ClimbOutOnTop)
+                );
+        }
+    }
 
     public Vector3 climbingVelocity = Vector3.zero;
 
-    public float maxClimbingSpeed = 1.5f;
-
-    public override void HandleMoveInput(Vector3 premultipliedMovement)
+    public override void HandleMoveInput(Vector3 desiredVelocity)
     {
-        Ray ray = new Ray(player.hipsPosition, player.transform.forward);
+        Ray ray = new Ray(SEnSe.hipsPosition, SEnSe.transform.forward);
         LayerMask lm = LayerMask.NameToLayer("Climbable");
         if (Physics.Raycast(ray, out RaycastHit hit, 1.5f))
         {
-            player.transform.Translate(ray.direction * (hit.distance - 0.35f) * 5 * Time.deltaTime, Space.World);
+            SEnSe.transform.Translate(ray.direction * (hit.distance - 0.35f) * 5 * Time.deltaTime, Space.World);
 
-            player.transform.forward = Vector3.RotateTowards(player.transform.forward, -hit.normal, Time.deltaTime * 1, 0);
+            SEnSe.transform.forward = Vector3.RotateTowards(SEnSe.transform.forward, -hit.normal, Time.deltaTime * 1, 0);
 
-            Vector3 translatedToClimbing = new Vector3(premultipliedMovement.x, premultipliedMovement.z, 0);
-
+            Vector3 translatedToClimbing = new Vector3(desiredVelocity.x, desiredVelocity.z, 0);
             
             climbingVelocity = translatedToClimbing;
             
 
-            if (climbingVelocity.magnitude > maxClimbingSpeed) climbingVelocity = climbingVelocity.normalized * maxClimbingSpeed;
-            player.transform.localPosition += player.transform.rotation * climbingVelocity * Time.deltaTime;
+            //if (climbingVelocity.magnitude > _settings.regularSpeed) climbingVelocity = climbingVelocity.normalized * _settings.regularSpeed;
+            SEnSe.transform.localPosition += SEnSe.transform.rotation * climbingVelocity * Time.deltaTime;
         } else
         {
             int animHash = Animator.StringToHash("HangToTop");
             //player.CrossFadeAnimation(animHash);
-            player.PlayAnimation(animHash);
+            SEnSe.PlayAnimation(animHash);
             //SwitchState(_factory.GroundMovement());
         }
     }
 
-    protected override void SetAnimationMotionSpeed(Vector3 input)
+    protected override void SubscribeAnimationSpeed()
     {
-        player.SetAnimatedMotionSpeed(climbingVelocity.y);
+        AddManualSubscription(Observable.EveryUpdate().Select(n => climbingVelocity).Subscribe(n => SEnSe.SetAnimationSpeed(climbingVelocity.y)));
     }
 
     protected override void ExitConcreteState()
     {
-        throw new System.NotImplementedException();
+        SEnSe.SetKinematic(false);
+    }
+
+    protected override void UpdateConcreteState()
+    {
+        // TODO
+    }
+
+    protected override void UpdateConcreteGravity()
+    {
+        // No gravity
+        return;
     }
 }

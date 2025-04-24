@@ -61,14 +61,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\AnimationSensors\MidStrokeAnimationSensor.cs" />
-    <Compile Include="Assets\Scripts\Player\ReactiveSensors\SensorCombinators\SensorCombinatorBoolBool.cs" />
-    <Compile Include="Assets\Scripts\Player\ReactiveSensors\SensorCombinators\SensorCombinatorVecBool.cs" />
     <Compile Include="Assets\StateMachineDebugText.cs" />
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\LookSensor.cs" />
     <Compile Include="Assets\StarterAssets\Mobile\Scripts\CanvasInputs\UICanvasControllerInput.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerStateMachine\States\MidAir\ControlledDescend.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerStateMachine\States\MidAir\MidAirState.cs" />
     <Compile Include="Assets\PlayerCameraRoot.cs" />
     <Compile Include="Assets\Scripts\Environment\ParcourObject.cs" />
-    <Compile Include="Assets\Scripts\Player\PlayerStateMachine\States\PlayerState.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerStateMachine\States\GroundMovement\GroundMovementState.cs" />
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\Abstracts\ReactiveVec3Sensor.cs" />
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\KeySensors.cs\TriggerSensor.cs" />
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\Abstracts\ReactiveBoolSensor.cs" />
@@ -79,31 +79,31 @@
     <Compile Include="Assets\Scripts\General\IllegalSensorSubscriptionException.cs" />
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\KeySensors.cs\ToggleSensor.cs" />
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\Abstracts\ReactiveSensor.cs" />
+    <Compile Include="Assets\Scripts\Player\ReactiveSensors\TouchingSomethingCapsuleSensor.cs" />
     <Compile Include="Assets\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualButton.cs" />
-    <Compile Include="Assets\Scripts\Player\PlayerStateMachine\PlayerStateMachine_OLD.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
-    <Compile Include="Assets\Scripts\Player\ReactiveSensors\SensorCombinators\SensorCombinatorVecFloat.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerStateMachine\States\ScriptedAnimationState.cs" />
-    <Compile Include="Assets\Scripts\Player\PlayerStateMachine\States\MidAirState.cs" />
-    <Compile Include="Assets\Scripts\Player\PlayerStateMachine\PlayerState_OLD.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerStateMachine\States\MovementBaseState.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerStateMachine\States\MovementStateSettings.cs" />
     <Compile Include="Assets\Scripts\Environment\CollidableElement.cs" />
     <Compile Include="Assets\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualJoystick.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerStateMachine\States\SwimmingState.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerStateMachine\States\MidAir\ControlledAscend.cs" />
     <Compile Include="Assets\StarterAssets\Mobile\Scripts\Utilities\MobileDisableAutoSwitchControls.cs" />
+    <Compile Include="Assets\Scripts\Player\ReactiveSensors\HeightSensor.cs" />
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\TouchingSomethingSensor.cs" />
     <Compile Include="Assets\SensorDebug.cs" />
     <Compile Include="Assets\Scripts\General\ReactiveExample.cs" />
-    <Compile Include="Assets\Scripts\Player\PlayerCharacer.cs" />
+    <Compile Include="Assets\MovingBodyOfWater.cs" />
     <Compile Include="Assets\StarterAssets\ThirdPersonController\Scripts\BasicRigidBodyPush.cs" />
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\KeySensors.cs\KeySensor.cs" />
-    <Compile Include="Assets\Scripts\Player\PlayerStateMachine\States\PlayerStateMachine.cs" />
+    <Compile Include="Assets\Scripts\Player\ReactiveSensors\PlayerVelocitySensor.cs" />
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\SensorFactory.cs" />
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\MoveInputSensor.cs" />
-    <Compile Include="Assets\Scripts\Player\PlayerStateMachine\States\GroundMovementState.cs" />
-    <Compile Include="Assets\Scripts\Player\PlayerStateMachine\States\GroundMovementState_OLD.cs" />
+    <Compile Include="Assets\Scripts\Player\ReactiveSensors\PlayerVeclocitySensor.cs" />
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\AnimationSensors\WaitForAnimationSensor.cs" />
     <Compile Include="Assets\StarterAssets\InputSystem\StarterAssetsInputs.cs" />
-    <Compile Include="Assets\Scripts\Player\PlayerStateMachine\PlayerStateFactory.cs" />
+    <Compile Include="Assets\Scripts\Player\SensorEnabledMovementStateMachine.cs" />
     <Compile Include="Assets\StarterAssets\ThirdPersonController\Scripts\ThirdPersonController.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -42,9 +42,9 @@ public class SensorDebug : MonoBehaviour
             strings.Add("No Values Yet");
             strings.Add("No Values Yet");
             strings.Add("No Values Yet");
-            try { disposables.Add(sensorsFound[i].SubscribeV(vector3actions[i])); } catch (Exception e) {strings[i*3] = "No Vec3 Overload (" + e.Message + ")"; }
-            try { disposables.Add(sensorsFound[i].SubscribeB(boolActions[i])); } catch (Exception e) { strings[i * 3 + 1] = "No Bool Overload (" + e.Message + ")"; }
-            try { disposables.Add(sensorsFound[i].SubscribeF(floatActions[i])); } catch (Exception e) { strings[i * 3 + 2] = "No Float Overload (" + e.Message + ")"; }
+            try { disposables.Add(sensorsFound[i].ExposeVector3Observable().Subscribe(vector3actions[i])); } catch (Exception e) {strings[i*3] = "No Vec3 Overload (" + e.Message + ")"; }
+            try { disposables.Add(sensorsFound[i].ExposeBoolObservable().Subscribe(boolActions[i])); } catch (Exception e) { strings[i * 3 + 1] = "No Bool Overload (" + e.Message + ")"; }
+            try { disposables.Add(sensorsFound[i].ExposeFloatObservable().Subscribe(floatActions[i])); } catch (Exception e) { strings[i * 3 + 2] = "No Float Overload (" + e.Message + ")"; }
         }
     }
 
