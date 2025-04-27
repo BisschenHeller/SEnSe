@@ -9,10 +9,16 @@ public class MovementStateSettings : ScriptableObject
     public float regularSpeed;
     public float sprintSpeed;
     public float jumpPower;
-    [Range(-5f, 5f)]
+    [Range(-3f, 3f)]
     public float gravityMultiplier;
     [Range(0.0f, 1.0f)]
     public float directionChangeRadius;
+    [Range(0, 1)]
+    [Tooltip("How fast should the player come to a standstill if no input is provided?")]
+    public float drag = 0.1f;
+    [Range(0, 1)]
+    [Tooltip("How fast should the player accellerate?")]
+    public float accelleration = 0.1f;
     [Space(20)]
     [Header("--------------- Animation ---------------")]
     public string animationBlendTreeName;
@@ -41,5 +47,5 @@ public class MovementStateSettings : ScriptableObject
 
 public enum MovementSettingsID
 {
-    GroundMovement, Swimming, Midair, Climbing, Transition, Ladder
+    GroundMovement, Swimming, Jumping, Falling, Climbing, Transition, Ladder
 }

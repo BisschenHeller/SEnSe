@@ -1,6 +1,8 @@
+using UnityEngine;
+
 public class ControlledDescend : MovementBaseState
 {
-    public ControlledDescend(SensorEnabledMovementStateMachine sense) : base(sense, sense._midAirSettings)
+    public ControlledDescend(SensorEnabledMovementStateMachine sense) : base(sense, sense._fallingSettings)
     {
 
     }
@@ -10,9 +12,9 @@ public class ControlledDescend : MovementBaseState
         return "Controlled Descend";
     }
 
-    protected override void UpdateConcreteGravity()
+    protected override void UpdateGravity()
     {
-        base.UpdateGeneralGravity();
+        base.ApplyBasicGravity();
     }
 
     public override void InitializeSubState()
@@ -20,12 +22,17 @@ public class ControlledDescend : MovementBaseState
         
     }
 
+    private void TransitionToGroundMovement(bool doIt)
+    {
+        if (doIt) SwitchState(new GroundMovementState(SEnSe));
+    }
+
     protected override void EnterConcreteState()
     {
         // When in water transition to swim
 
         // When grounded transition to groundmovement
-
+        AddSubscription(SensorID.Grounded, TransitionToGroundMovement);
         // When touching climbable transition to climbable
         
     }

@@ -12,7 +12,7 @@ public class WaitForAnimationSensor : ReactiveSensor
 
     private Observable<bool> _boolObservable = null;
     private Observable<bool> boolObservable {
-        get { if (_boolObservable == null) _boolObservable = Observable.EveryUpdate().Select(n => { if (animFinished) { animFinished = false; return true; } return false; }).DistinctUntilChanged(); return _boolObservable; } 
+        get { if (_boolObservable == null) _boolObservable = Observable.EveryUpdate().Select(n => { if (animFinished) { Debug.Log("Anim Finished!");  animFinished = false; return true; } return false; }).DistinctUntilChanged(); return _boolObservable; } 
     }
 
     public override SensorID GetSensorID()

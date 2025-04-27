@@ -45,7 +45,24 @@ public class SwimmingState : MovementBaseState
         
     }
 
-    protected override void UpdateConcreteGravity()
+    protected override void SubscribeMoveInput()
+    {
+        if (SEnSe._sensorsByKey.TryGetValue(SensorID.HorizontalInput, out ReactiveSensor horizInputSensor) &&
+            SEnSe._sensorsByKey.TryGetValue(SensorID.Sprint, out ReactiveSensor sprintSensor) &&
+            SEnSe._sensorsByKey.TryGetValue(SensorID.AnimationCurve_Stroke, out ReactiveSensor strokeSensor))
+        {
+            AddManualSubscription(horizInputSensor.ExposeVector3Observable()
+                .CombineLatest<Vector3, bool, Vector3>(sprintSensor.ExposeBoolObservable(),
+                    // Multiplying move input by sprint button input
+                    (horiz, sprint) => { return (horiz * (sprint ? _settings.sprintSpeed : _settings.regularSpeed)); })
+                .CombineLatest<Vector3, float, Vector3>(strokeSensor.ExposeFloatObservable(),
+                    // Multiplying move input by swimming stroke force
+                    (horizVelocity, strokeMultiplier) => horizVelocity * strokeMultiplier)
+                .Subscribe<Vector3>(HandleMoveInput));
+        }
+    }
+
+    protected override void UpdateGravity()
     {
         /*if (SEnSe.grounded)
             SEnSe.transform.position = new Vector3(SEnSe.transform.position.x, Mathf.Max(SEnSe.transform.position.y, surfaceLevel - SEnSe.height / 2), SEnSe.transform.position.z);

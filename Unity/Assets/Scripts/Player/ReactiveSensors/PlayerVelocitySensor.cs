@@ -4,11 +4,11 @@ using UnityEngine;
 [RequireComponent(typeof(SensorEnabledMovementStateMachine))]
 public class PlayerVelocitySensor : ReactiveVec3Sensor
 {
-    private SensorEnabledMovementStateMachine sense;
+    private SensorEnabledMovementStateMachine sensa;
 
     private void Awake()
     {
-        sense = GetComponent<SensorEnabledMovementStateMachine>();
+        sensa = GetComponent<SensorEnabledMovementStateMachine>();
     }
 
     public override SensorID GetSensorID()
@@ -23,6 +23,6 @@ public class PlayerVelocitySensor : ReactiveVec3Sensor
 
     protected override Observable<Vector3> ConstructObservable()
     {
-        return Observable.EveryUpdate().Select((n) => sense.velocity).DistinctUntilChanged();
+        return Observable.EveryUpdate().Select((n) => sensa.velocity).DistinctUntilChanged();
     }
 }

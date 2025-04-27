@@ -8,7 +8,7 @@ public abstract class MovementBaseState
 {
     protected SensorEnabledMovementStateMachine SEnSe;
 
-    protected MovementStateSettings _settings;
+    public MovementStateSettings _settings { get; protected set; }
 
     private List<IDisposable> activeSubscriptions = new List<IDisposable>();
 
@@ -29,16 +29,13 @@ public abstract class MovementBaseState
 
     public void EnterState()
     {
-        if (SEnSe._sensorsByKey.TryGetValue(SensorID.HorizontalInput, out ReactiveSensor horizInputSensor) &&
-            SEnSe._sensorsByKey.TryGetValue(SensorID.Sprint, out ReactiveSensor sprintSensor))
-        {
-            AddManualSubscription(horizInputSensor.ExposeVector3Observable().CombineLatest<Vector3, bool, Vector3>(sprintSensor.ExposeBoolObservable(),
-                (horiz, sprint) => { return (horiz * (sprint ? _settings.sprintSpeed : _settings.regularSpeed)); }).Subscribe<Vector3>(HandleMoveInput));
-        }
+        SubscribeMoveInput();
         
         AddSubscription(SensorID.LookAround, LookAround);
         SubscribeAnimationSpeed();
         AddSubscription(SensorID.Grounded, SetGrounded);
+
+        AddSubscription(SensorID.Jump, HandleJumpInput);
 
         EnterConcreteState();
     }
@@ -46,7 +43,7 @@ public abstract class MovementBaseState
     public void ExitState()
     {
         activeSubscriptions.ForEach(n => n.Dispose());
-
+        activeSubscriptions.Clear();
         ExitConcreteState();
     }
 
@@ -79,6 +76,16 @@ public abstract class MovementBaseState
         AddSubscription(SensorID.PlayerVelocity, SetAnimationSpeedFromHorizVelocity);
     }
 
+    protected virtual void SubscribeMoveInput()
+    {
+        if (SEnSe._sensorsByKey.TryGetValue(SensorID.HorizontalInput, out ReactiveSensor horizInputSensor) &&
+            SEnSe._sensorsByKey.TryGetValue(SensorID.Sprint, out ReactiveSensor sprintSensor))
+        {
+            AddManualSubscription(horizInputSensor.ExposeVector3Observable().CombineLatest<Vector3, bool, Vector3>(sprintSensor.ExposeBoolObservable(),
+                (horiz, sprint) => { return (horiz * (sprint ? _settings.sprintSpeed : _settings.regularSpeed)); }).Subscribe<Vector3>(HandleMoveInput));
+        }
+    }
+
     protected void SetAnimationSpeedFromHorizVelocity(Vector3 velocity)
     {
         float normally = new Vector3(velocity.x, 0, velocity.z).magnitude / _settings.sprintSpeed;
@@ -90,6 +97,10 @@ public abstract class MovementBaseState
     {
         //Debug.Log("SetGrounded(" + newGrounded + ")");
         SEnSe.grounded = newGrounded;
+        /*if (!SEnSe.grounded)
+        {
+            SwitchState(new ControlledDescend(SEnSe));
+        }*/
     }
 
     public virtual void HandleMoveInput(Vector3 desiredVelocity)
@@ -107,10 +118,10 @@ public abstract class MovementBaseState
         }
         else if (SEnSe.currentSpeed > targetSpeed)
         {
-            SEnSe.currentSpeed -= Time.deltaTime * 10;
+            SEnSe.currentSpeed -= Time.deltaTime * 100 * _settings.drag;
         } else
         {
-            SEnSe.currentSpeed += Time.deltaTime * 10;
+            SEnSe.currentSpeed += Time.deltaTime * 100 * _settings.accelleration;
         }
 
         // normalise input direction
@@ -195,23 +206,24 @@ public abstract class MovementBaseState
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
 
-    protected virtual void Jump(bool jumping)
+    protected virtual void HandleJumpInput(bool jumping)
     {
+        Debug.Log("HandleJumpInput()");
         if (SEnSe.grounded)
         {
             Debug.Log("Jump!");
-            SwitchState(new MidAirState(SEnSe, true));
+            SwitchState(new ControlledAscend(SEnSe, new Vector3(0, _settings.jumpPower, 0)));
         }
     }
 
-    protected virtual void UpdateGeneralGravity()
+    protected virtual void ApplyBasicGravity()
     {
         if (!SEnSe.grounded) SEnSe.verticalVelocity += SEnSe.gravity * Time.deltaTime * _settings.gravityMultiplier;
     }
 
     public void UpdateState()
     {
-        UpdateConcreteGravity();
+        UpdateGravity();
         UpdateConcreteState();
     }
 
@@ -221,5 +233,5 @@ public abstract class MovementBaseState
 
     protected abstract void UpdateConcreteState();
 
-    protected abstract void UpdateConcreteGravity();
+    protected abstract void UpdateGravity();
 }

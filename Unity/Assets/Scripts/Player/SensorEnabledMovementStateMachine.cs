@@ -33,10 +33,10 @@ public class SensorEnabledMovementStateMachine : MonoBehaviour
     public MovementStateSettings _swimmingSettings;
     
     public MovementStateSettings _climbingSettings;
-    
-    public MovementStateSettings _ladderSettings;
 
-    public MovementStateSettings _midAirSettings;
+    public MovementStateSettings _fallingSettings;
+
+    public MovementStateSettings _jumpingSettings;
 
     public MovementStateSettings _transitionSettings;
 
@@ -70,7 +70,7 @@ public class SensorEnabledMovementStateMachine : MonoBehaviour
     [Space]
     // Expose the animator to the states
     [SerializeField]
-    private Animator _animator;
+    public Animator _animator;
     [SerializeField]
     [Tooltip("Time to blend between animations BlendTrees in seconds")]
     private float blendTreeBlendTime;
@@ -110,12 +110,6 @@ public class SensorEnabledMovementStateMachine : MonoBehaviour
     [Header("____________________ Reactive Sensors ____________________")]
     [Space]
     public List<string> sensorsFound;
-    [HideInInspector]
-    private SensorFactory sensorFactory;
-    public void AddSensor(SensorID id)
-    {
-        _sensorsByKey.Add(id, sensorFactory.CreateSensor(id));
-    }
 
     // Expose position and rotation to the states as read-only
     public Vector3 position { get { return transform.position; } }
@@ -130,12 +124,12 @@ public class SensorEnabledMovementStateMachine : MonoBehaviour
                 return _groundMovementSettings;
             case MovementSettingsID.Swimming:
                 return _swimmingSettings;
-            case MovementSettingsID.Midair:
-                return _midAirSettings;
+            case MovementSettingsID.Falling:
+                return _fallingSettings;
+            case MovementSettingsID.Jumping:
+                return _jumpingSettings;
             case MovementSettingsID.Climbing:
                 return _climbingSettings;
-            case MovementSettingsID.Ladder:
-                return _ladderSettings;
             default:
                 return _transitionSettings;
         }
@@ -156,7 +150,7 @@ public class SensorEnabledMovementStateMachine : MonoBehaviour
 
         _characterController = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
-        sensorFactory = GetComponent<SensorFactory>();
+        
 
         _groundMovementSettings.animationBlendTreeIndex = Animator.StringToHash(_groundMovementSettings.animationBlendTreeName);
         _swimmingSettings.animationBlendTreeIndex = Animator.StringToHash(_swimmingSettings.animationBlendTreeName);
@@ -335,6 +329,22 @@ public class SensorEnabledMovementStateMachine : MonoBehaviour
         else
         {
             throw new System.Exception("Either sensor " + boolSensorID.ToString() + " or Sensor " + floatSensorID.ToString() + " could not be found.");
+        }
+    }
+
+    public Observable<T> CombineFloatSensorsTo<T>(SensorID sensor1ID, SensorID sensor2ID, Func<float, float, T> combinator)
+    {
+        if (_sensorsByKey.TryGetValue(sensor1ID, out ReactiveSensor floatSensor1) &&
+            _sensorsByKey.TryGetValue(sensor2ID, out ReactiveSensor floatSensor2))
+        {
+            return (floatSensor1.ExposeFloatObservable()
+                .CombineLatest(floatSensor2
+                .ExposeFloatObservable(), (float1, float2) => { return combinator(float1, float2); })
+                );
+        }
+        else
+        {
+            throw new System.Exception("Either sensor " + sensor1ID.ToString() + " or Sensor " + sensor2ID.ToString() + " could not be found.");
         }
     }
 

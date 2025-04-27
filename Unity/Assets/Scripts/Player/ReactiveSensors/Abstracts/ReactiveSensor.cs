@@ -57,5 +57,5 @@ public enum SensorID
     AnimationFinished = 12,
     TouchingClimbable = 13,
     PlayerVelocity = 14,
-    AnimationCurve1 = 15
+    AnimationCurve_Stroke = 15
 }

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32d9dd2d3a96e654e9514932ecc0609f, type: 3}
+  m_Name: SwimmingSettings
+  m_EditorClassIdentifier: 
+  movementSettingsID: 1
+  regularSpeed: 3
+  sprintSpeed: 4
+  jumpPower: 0
+  gravityMultiplier: 0.93
+  directionChangeRadius: 0.5
+  drag: 0.05
+  accelleration: 0.1
+  animationBlendTreeName: Swimming
+  animationBlendTreeIndex: 2147435812
+  pitchClampTop: 80
+  pitchClampBottom: -40
+  clampYaw: 0
+  yawClampSymmetric: 0

@@ -29,6 +29,8 @@ public class ClimbingState : MovementBaseState
     {
         // Start Transition Animation
         SwitchState(new ScriptedAnimationState(SEnSe, AnimationID.Climbing_TopOut, 
+            // In future versions this needs to be handled in the animation import or through root motion
+            new Vector3(0, 1.772f, -0.482f),
             // When that is done, go to ground movement
             (n) => SwitchState(new GroundMovementState(SEnSe))));
     }
@@ -112,7 +114,7 @@ public class ClimbingState : MovementBaseState
         // TODO
     }
 
-    protected override void UpdateConcreteGravity()
+    protected override void UpdateGravity()
     {
         // No gravity
         return;

@@ -1,4 +1,5 @@
 using System;
+using UnityEditor.ShaderGraph;
 using UnityEngine;
 
 public class ScriptedAnimationState : MovementBaseState 
@@ -7,13 +8,17 @@ public class ScriptedAnimationState : MovementBaseState
 
     private Action<bool> _onComplete;
 
-    public ScriptedAnimationState(
-        SensorEnabledMovementStateMachine stateMachine, 
-        AnimationID animation, Action<bool> onComplete) 
+    private Vector3 _totalDisplacement;
+
+    private Vector3 _initialPosition;
+
+    public ScriptedAnimationState(SensorEnabledMovementStateMachine stateMachine, AnimationID animation, Vector3 totalDisplacement, Action<bool> onComplete) 
         : base(stateMachine, stateMachine._transitionSettings) 
     { 
         _animation = animation;
         _onComplete = onComplete;
+        _totalDisplacement = totalDisplacement;
+        _initialPosition = SEnSe.transform.position;
     }
 
     public override string GetStateName()
@@ -36,10 +41,6 @@ public class ScriptedAnimationState : MovementBaseState
 
     protected override void EnterConcreteState()
     {
-        // Add Sensor that will tell us whe the animation is finished and subscribe to that sensor.
-        //_player.AddSensor(SensorID.WaitOnAnimationFinished);
-        
-
         SEnSe.SetKinematic(true);
         
         AddSubscription(SensorID.AnimationFinished, TransitionToGroundMovement);
@@ -47,7 +48,7 @@ public class ScriptedAnimationState : MovementBaseState
         bool exists = SEnSe.animationHashes.TryGetValue(_animation, out int animationHash);
         if (!exists) Debug.LogError("Animation " + _animation.ToString() + " does not exist.");
         //Debug.Log("Playing animation " + _animation.ToString() + " (Hash=" + animationHash + ")");
-        SEnSe.PlayAnimation(animationHash); 
+        SEnSe.CrossFadeAnimation(animationHash, 0.5f); 
     }
 
     protected override void ExitConcreteState()
@@ -61,7 +62,7 @@ public class ScriptedAnimationState : MovementBaseState
         return;
     }
 
-    protected override void UpdateConcreteGravity()
+    protected override void UpdateGravity()
     {
         return;
         // No Gravity
@@ -69,7 +70,8 @@ public class ScriptedAnimationState : MovementBaseState
 
     protected override void UpdateConcreteState()
     {
-        SEnSe.transform.position += SEnSe.transform.forward * Time.deltaTime * SEnSe.currentSpeed;
+        float normalizedTime = SEnSe._animator.GetFloat("Progress");
+        SEnSe.transform.position = _initialPosition + _totalDisplacement * normalizedTime;
     }
 }
 

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32d9dd2d3a96e654e9514932ecc0609f, type: 3}
+  m_Name: GroundMovementSettings
+  m_EditorClassIdentifier: 
+  movementSettingsID: 0
+  regularSpeed: 3
+  sprintSpeed: 10
+  jumpPower: 0.1
+  gravityMultiplier: 0.04
+  directionChangeRadius: 0.2
+  drag: 0.5
+  accelleration: 0.1
+  animationBlendTreeName: GroundMovement
+  animationBlendTreeIndex: 1560030290
+  pitchClampTop: 78.6
+  pitchClampBottom: -61.3
+  clampYaw: 0
+  yawClampSymmetric: 0

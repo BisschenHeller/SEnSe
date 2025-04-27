@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class ControlledAscend : MovementBaseState
 {
-    private float _jumpPower = -1;
-    public ControlledAscend(SensorEnabledMovementStateMachine fsm, float jumpPower) : base(fsm, fsm._midAirSettings)
+    private Vector3 _jumpTrajectory = Vector3.zero;
+    public ControlledAscend(SensorEnabledMovementStateMachine fsm, Vector3 jumpTrajectory) : base(fsm, fsm._fallingSettings)
     {
-        _jumpPower = jumpPower;
+        _jumpTrajectory = jumpTrajectory;
     }
 
     public override string GetStateName()
@@ -18,29 +18,20 @@ public class ControlledAscend : MovementBaseState
         throw new System.NotImplementedException();
     }
 
-    private void ReactToVelocity(Vector3 velocity)
-    {
-        if (velocity.y <= 0) { }
-    }
-
     protected override void EnterConcreteState()
     {
-        SEnSe.verticalVelocity = _jumpPower;
+        SEnSe.verticalVelocity = _jumpTrajectory.y;
 
-        AddSubscription(SensorID.PlayerVelocity, ReactToVelocity);
+        // TODO Calculate this hash beforehand
+        SEnSe.PlayAnimation(Animator.StringToHash("Blend Tree Jump Start"));
     }
 
     public override void HandleMoveInput(Vector3 desiredVelocity)
     {
-        // No Control over direction mid-flight
-        return;
-
-        // Optional: Designated fraction of control
-        // 
-        // base.HandleMoveInput(premultipliedMovement * 0.3f);
+        base.HandleMoveInput(desiredVelocity * 0.1f);
     }
 
-    protected override void Jump(bool jumping)
+    protected override void HandleJumpInput(bool jumping)
     {
         // No Double Jump
         return;
@@ -53,11 +44,15 @@ public class ControlledAscend : MovementBaseState
 
     protected override void UpdateConcreteState()
     {
-        // TODO
+        Debug.Log("Vert Velocity: " + SEnSe.verticalVelocity);
+        if (SEnSe.verticalVelocity <= 0)
+        {
+            SwitchState(new ControlledDescend(SEnSe));
+        }
     }
 
-    protected override void UpdateConcreteGravity()
+    protected override void UpdateGravity()
     {
-        // TODO
+        base.ApplyBasicGravity();
     }
 }

@@ -76,6 +76,7 @@
     <Compile Include="Assets\Scripts\Environment\CollidableHeightObject.cs" />
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\KeySensors.cs\HoldingSensor.cs" />
     <Compile Include="Assets\StarterAssets\Mobile\Scripts\VirtualInputs\UIVirtualTouchZone.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerStateMachine\States\ParcourState.cs" />
     <Compile Include="Assets\Scripts\General\IllegalSensorSubscriptionException.cs" />
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\KeySensors.cs\ToggleSensor.cs" />
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\Abstracts\ReactiveSensor.cs" />
@@ -93,14 +94,11 @@
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\HeightSensor.cs" />
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\TouchingSomethingSensor.cs" />
     <Compile Include="Assets\SensorDebug.cs" />
-    <Compile Include="Assets\Scripts\General\ReactiveExample.cs" />
     <Compile Include="Assets\MovingBodyOfWater.cs" />
     <Compile Include="Assets\StarterAssets\ThirdPersonController\Scripts\BasicRigidBodyPush.cs" />
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\KeySensors.cs\KeySensor.cs" />
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\PlayerVelocitySensor.cs" />
-    <Compile Include="Assets\Scripts\Player\ReactiveSensors\SensorFactory.cs" />
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\MoveInputSensor.cs" />
-    <Compile Include="Assets\Scripts\Player\ReactiveSensors\PlayerVeclocitySensor.cs" />
     <Compile Include="Assets\Scripts\Player\ReactiveSensors\AnimationSensors\WaitForAnimationSensor.cs" />
     <Compile Include="Assets\StarterAssets\InputSystem\StarterAssetsInputs.cs" />
     <Compile Include="Assets\Scripts\Player\SensorEnabledMovementStateMachine.cs" />

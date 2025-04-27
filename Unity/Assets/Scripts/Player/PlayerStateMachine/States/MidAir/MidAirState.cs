@@ -1,17 +1,32 @@
 public class MidAirState : MovementBaseState
 {
-    public MidAirState(SensorEnabledMovementStateMachine context, bool jump = false) 
-    : base(context, context._midAirSettings) {
-        if (jump)
-        {
-
-        }
+    public MidAirState(SensorEnabledMovementStateMachine context) 
+    : base(context, context._fallingSettings) {
+        
     }
-
 
     protected override void EnterConcreteState()
     {
-        // TODO
+        AddSubscription(SensorID.Grounded, TransitionToGrounded);
+
+        AddSubscription(SensorID.InsideDeepWater, TransitionToSwimming);
+
+        AddSubscription(SensorID.TouchingClimbable, TransitionToClimbing);
+    }
+
+    private void TransitionToClimbing(bool climbing)
+    {
+        SwitchState(new ClimbingState(SEnSe));
+    }
+
+    private void TransitionToGrounded(bool grounded)
+    {
+        SwitchState(new GroundMovementState(SEnSe));
+    }
+
+    private void TransitionToSwimming(bool swimming)
+    {
+        SwitchState(new SwimmingState(SEnSe));
     }
 
     protected override void ExitConcreteState()
@@ -24,9 +39,9 @@ public class MidAirState : MovementBaseState
         // TODO
     }
 
-    protected override void UpdateConcreteGravity()
+    protected override void UpdateGravity()
     {
-        base.UpdateGeneralGravity();
+        base.ApplyBasicGravity();
     }
 
     public override string GetStateName()
@@ -36,6 +51,6 @@ public class MidAirState : MovementBaseState
 
     protected override void UpdateConcreteState()
     {
-        throw new System.NotImplementedException();
+        
     }
 }

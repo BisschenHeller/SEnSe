@@ -33,10 +33,10 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Crouch",
-                    "type": "PassThrough",
-                    "id": "dd5c409a-361f-4133-8b4a-d8f5f5f417d8",
-                    "expectedControlType": "Key",
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "566f3a45-20f3-4b1b-9d0e-07e8f07c0b9d",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -232,23 +232,23 @@
                 },
                 {
                     "name": "",
-                    "id": "cf67ee4c-b6b3-473f-a887-dc31bf5b7d38",
-                    "path": "<Keyboard>/ctrl",
-                    "interactions": "Hold",
+                    "id": "87538cd1-c6d4-4b95-af58-a47698e58385",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Crouch",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "b6260ff6-ac3e-4992-a2e6-f9c99f8414f7",
-                    "path": "<Gamepad>/leftStickPress",
-                    "interactions": "Hold",
+                    "id": "f5dc0d3a-b772-4347-86e2-6da23c05c7fb",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Crouch",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
