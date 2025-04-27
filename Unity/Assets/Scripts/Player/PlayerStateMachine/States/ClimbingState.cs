@@ -30,14 +30,14 @@ public class ClimbingState : MovementBaseState
         // Start Transition Animation
         SwitchState(new ScriptedAnimationState(SEnSe, AnimationID.Climbing_TopOut, 
             // In future versions this needs to be handled in the animation import or through root motion
-            new Vector3(0, 1.772f, -0.482f),
+            new Vector3(0, 1.772f, 0.8f),
             // When that is done, go to ground movement
             (n) => SwitchState(new GroundMovementState(SEnSe))));
     }
 
     protected override void EnterConcreteState()
     {
-        int climbingHash = Animator.StringToHash("Climbing");
+        int climbingHash = Animator.StringToHash("2D Climbing");
         SEnSe.CrossFadeAnimation(climbingHash);
         SEnSe.SetKinematic(true);
 
@@ -85,7 +85,7 @@ public class ClimbingState : MovementBaseState
 
             Vector3 translatedToClimbing = new Vector3(desiredVelocity.x, desiredVelocity.z, 0);
             
-            climbingVelocity = translatedToClimbing;
+            climbingVelocity = 0.2f * climbingVelocity + 0.8f * translatedToClimbing;
             
 
             //if (climbingVelocity.magnitude > _settings.regularSpeed) climbingVelocity = climbingVelocity.normalized * _settings.regularSpeed;
@@ -101,7 +101,11 @@ public class ClimbingState : MovementBaseState
 
     protected override void SubscribeAnimationSpeed()
     {
-        AddManualSubscription(Observable.EveryUpdate().Select(n => climbingVelocity).Subscribe(n => SEnSe.SetAnimationSpeed(climbingVelocity.y)));
+        AddManualSubscription(Observable.EveryUpdate().Select(n => climbingVelocity).Subscribe(n => { 
+            SEnSe.SetAnimationSpeed(climbingVelocity.magnitude);
+            SEnSe._animator.SetFloat("Climb_X", climbingVelocity.x);
+            SEnSe._animator.SetFloat("Climb_Y", climbingVelocity.y);
+        }));
     }
 
     protected override void ExitConcreteState()

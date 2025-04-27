@@ -1,5 +1,4 @@
 using System;
-using UnityEditor.ShaderGraph;
 using UnityEngine;
 
 public class ScriptedAnimationState : MovementBaseState 
@@ -71,7 +70,7 @@ public class ScriptedAnimationState : MovementBaseState
     protected override void UpdateConcreteState()
     {
         float normalizedTime = SEnSe._animator.GetFloat("Progress");
-        SEnSe.transform.position = _initialPosition + _totalDisplacement * normalizedTime;
+        SEnSe.transform.position = _initialPosition + SEnSe.transform.rotation * _totalDisplacement * normalizedTime;
     }
 }
 

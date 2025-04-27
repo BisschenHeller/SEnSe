@@ -481,7 +481,7 @@ MonoBehaviour:
     m_Bits: 16
   _triggerInteraction: 2
   probeRadius: 0.2
-  lowestProbeY: -0.05
+  lowestProbeY: -0.4
   highestProbeY: 0.65
   gizmoAlpha: 0.399
   gizmoSphereCount: 3

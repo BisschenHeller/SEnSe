@@ -19,7 +19,7 @@ MonoBehaviour:
   gravityMultiplier: 0.04
   directionChangeRadius: 0.2
   drag: 0.5
-  accelleration: 0.1
+  accelleration: 0.544
   animationBlendTreeName: GroundMovement
   animationBlendTreeIndex: 1560030290
   pitchClampTop: 78.6

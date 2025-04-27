@@ -20,7 +20,7 @@ MonoBehaviour:
   directionChangeRadius: 0
   drag: 0.1
   accelleration: 0.1
-  animationBlendTreeName: Climbing
+  animationBlendTreeName: 2D Climbing
   animationBlendTreeIndex: 0
   pitchClampTop: 81.5
   pitchClampBottom: -82.7
