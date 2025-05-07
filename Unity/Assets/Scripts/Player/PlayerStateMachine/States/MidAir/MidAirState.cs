@@ -1,42 +1,20 @@
-public class MidAirState : MovementBaseState
+using UnityEngine;
+
+public abstract class MidAirState : MovementBaseState
 {
-    public MidAirState(SensorEnabledMovementStateMachine context) 
-    : base(context, context._fallingSettings) {
+    public MidAirState(SensorEnabledMovementStateMachine context, MovementStateSettings settings) 
+    : base(context, settings) {
         
     }
 
     protected override void EnterConcreteState()
     {
-        AddSubscription(SensorID.Grounded, TransitionToGrounded);
-
-        AddSubscription(SensorID.InsideDeepWater, TransitionToSwimming);
-
-        AddSubscription(SensorID.TouchingClimbable, TransitionToClimbing);
+        //AddSubscription(SensorID.TouchingClimbable, TransitionToClimbing);
     }
 
-    private void TransitionToClimbing(bool climbing)
+    protected void TransitionToClimbing(bool climbing)
     {
         SwitchState(new ClimbingState(SEnSe));
-    }
-
-    private void TransitionToGrounded(bool grounded)
-    {
-        SwitchState(new GroundMovementState(SEnSe));
-    }
-
-    private void TransitionToSwimming(bool swimming)
-    {
-        SwitchState(new SwimmingState(SEnSe));
-    }
-
-    protected override void ExitConcreteState()
-    {
-        // TODO
-    }
-
-    public override void InitializeSubState()
-    {
-        // TODO
     }
 
     protected override void UpdateGravity()
@@ -49,8 +27,9 @@ public class MidAirState : MovementBaseState
         return "MidAir";
     }
 
-    protected override void UpdateConcreteState()
+    public override void HandleMoveInput(Vector3 desiredVelocity)
     {
-        
+        // move the player along current trajectory
+        SEnSe.Move(SEnSe.transform.forward * (SEnSe.currentSpeed * Time.deltaTime) + SEnSe.verticalVelocity * Vector3.up);
     }
 }

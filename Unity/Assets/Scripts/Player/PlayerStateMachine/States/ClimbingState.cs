@@ -85,7 +85,7 @@ public class ClimbingState : MovementBaseState
 
             Vector3 translatedToClimbing = new Vector3(desiredVelocity.x, desiredVelocity.z, 0);
             
-            climbingVelocity = 0.2f * climbingVelocity + 0.8f * translatedToClimbing;
+            climbingVelocity = Vector3.Lerp(climbingVelocity, translatedToClimbing, Time.deltaTime * 10);
             
 
             //if (climbingVelocity.magnitude > _settings.regularSpeed) climbingVelocity = climbingVelocity.normalized * _settings.regularSpeed;

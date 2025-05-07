@@ -16,7 +16,7 @@ MonoBehaviour:
   regularSpeed: 0
   sprintSpeed: 0
   jumpPower: 0
-  gravityMultiplier: 0.01
+  gravityMultiplier: 0.005
   directionChangeRadius: 0
   drag: 0
   accelleration: 0

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using R3;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class MovementBaseState
@@ -11,10 +10,6 @@ public abstract class MovementBaseState
     public MovementStateSettings _settings { get; protected set; }
 
     private List<IDisposable> activeSubscriptions = new List<IDisposable>();
-
-    private MovementBaseState currentChildState;
-
-    private MovementBaseState currentParentState;
 
     // We need this reference because we want to adjust how far away the parkour Sensor is going to be.
     // private ReactiveSensor parkourSensor;
@@ -208,10 +203,8 @@ public abstract class MovementBaseState
 
     protected virtual void HandleJumpInput(bool jumping)
     {
-        Debug.Log("HandleJumpInput()");
         if (SEnSe.grounded)
         {
-            Debug.Log("Jump!");
             SwitchState(new ControlledAscend(SEnSe, new Vector3(0, _settings.jumpPower, 0)));
         }
     }

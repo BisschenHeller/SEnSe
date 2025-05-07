@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSettingsID: 3
   regularSpeed: 0.75
-  sprintSpeed: 1.5
-  jumpPower: 5
+  sprintSpeed: 0.8
+  jumpPower: 1
   gravityMultiplier: 0
   directionChangeRadius: 0
   drag: 0.1

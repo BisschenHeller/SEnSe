@@ -3,14 +3,15 @@ using UnityEngine;
 
 public class GroundMovementState : MovementBaseState
 {
+    private int _entryHash = -1;
     public override string GetStateName()
     {
         return "GroundMovement";
     }
-    public GroundMovementState(SensorEnabledMovementStateMachine currentContext)
+    public GroundMovementState(SensorEnabledMovementStateMachine currentContext, int entryHash = -1)
     :base(currentContext, currentContext._groundMovementSettings) 
     {
-        
+        _entryHash = entryHash;
     }
 
     protected override void EnterConcreteState()
@@ -22,7 +23,19 @@ public class GroundMovementState : MovementBaseState
 
         AddClimbableSubscription();
 
+        AddSubscription(SensorID.Grounded, StartFalling);
+
         SEnSe.SetMovementSettingsAndBlendTree(MovementSettingsID.GroundMovement);
+    }
+
+    private void StartFalling(bool grounded)
+    {
+
+        if (!grounded)
+        {
+            Debug.Log("Vertical Velocity: " + SEnSe.verticalVelocity);
+            SwitchState(new ControlledDescend(SEnSe));
+        }
     }
 
     public void SwitchToWater(bool touchingWater)

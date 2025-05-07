@@ -71,7 +71,7 @@ public class SwimmingState : MovementBaseState
         //if (SEnSe.grounded) base.UpdateGeneralGravity();
 
         SEnSe.verticalVelocity = Mathf.SmoothStep(-0.01f, 0.01f, surfaceLevel - waterHeight - SEnSe.transform.position.y);
-        Debug.Log(surfaceLevel - waterHeight - SEnSe.transform.position.y);
+        //Debug.Log(surfaceLevel - waterHeight - SEnSe.transform.position.y);
         
     }
 

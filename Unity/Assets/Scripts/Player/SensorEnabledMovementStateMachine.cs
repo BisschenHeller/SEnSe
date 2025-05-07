@@ -34,7 +34,7 @@ public class SensorEnabledMovementStateMachine : MonoBehaviour
     
     public MovementStateSettings _climbingSettings;
 
-    public MovementStateSettings _fallingSettings;
+    public MovementStateSettings _midAirSettings;
 
     public MovementStateSettings _jumpingSettings;
 
@@ -83,7 +83,7 @@ public class SensorEnabledMovementStateMachine : MonoBehaviour
     public float currentMotionSpeed;
     [Range(0.0f, 1.0f)]
     public float desiredMotionSpeed;
-    public void PlayAnimation(int animationHash) { _animator.Play(animationHash); }
+    public void PlayAnimation(int animationHash) { Debug.Log("Now playing animation " + animationHash); _animator.Play(animationHash); }
     public void CrossFadeAnimation(int animationHash, float fadeTime = 0.2f) { _animator.CrossFadeInFixedTime(animationHash, fadeTime); }
     public void SetAnimationSpeed(float value) { _animator.SetFloat(_motionSpeedHash, value); }
     private int _motionSpeedHash = -1;
@@ -125,7 +125,7 @@ public class SensorEnabledMovementStateMachine : MonoBehaviour
             case MovementSettingsID.Swimming:
                 return _swimmingSettings;
             case MovementSettingsID.Falling:
-                return _fallingSettings;
+                return _midAirSettings;
             case MovementSettingsID.Jumping:
                 return _jumpingSettings;
             case MovementSettingsID.Climbing:

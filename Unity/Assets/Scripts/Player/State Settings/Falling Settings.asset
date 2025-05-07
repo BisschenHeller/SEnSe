@@ -16,8 +16,10 @@ MonoBehaviour:
   regularSpeed: 0
   sprintSpeed: 0
   jumpPower: 0
-  gravityMultiplier: 0.02
+  gravityMultiplier: 0.01
   directionChangeRadius: 0
+  drag: 0.1
+  accelleration: 0.1
   animationBlendTreeName: MidAir
   animationBlendTreeIndex: 0
   pitchClampTop: 80

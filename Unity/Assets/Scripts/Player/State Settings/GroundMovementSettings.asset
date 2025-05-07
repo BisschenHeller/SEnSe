@@ -15,7 +15,7 @@ MonoBehaviour:
   movementSettingsID: 0
   regularSpeed: 3
   sprintSpeed: 10
-  jumpPower: 0.1
+  jumpPower: 0.02
   gravityMultiplier: 0.04
   directionChangeRadius: 0.2
   drag: 0.5
